@@ -1,0 +1,22 @@
+<h1>{{ question.question_text }}</h1>
+
+<div>
+    <ul>
+        {% for choice in question.choice_set.all %}
+            {% if choice.correct %}
+                <li style="color: green;">{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }} ✅</li>
+            {% endif %}
+            {% if not choice.correct %}
+                <li style="color: red;">{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }} ❌</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    
+</div>
+
+
+
+
+<a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+<br><br>
+<a href="{% url 'polls:index' %}">Back to Polls</a>

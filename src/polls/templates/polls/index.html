@@ -1,0 +1,59 @@
+{% load static  %}
+<link rel="stylesheet" href="{% static 'polls/output.css' %}">
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polls</title>
+</head>
+<body>  
+    <div class="page-container">
+    
+    {% if latest_question_list %}
+        <div class="questions-container">
+            {% for question in latest_question_list %}
+                <div class="question-item">
+                    <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-polls">No polls are available.</p>
+    {% endif %}
+    
+    
+    </div>
+
+    <div class="chat-container">
+        <div class="chat chat-start">
+        <div class="chat-bubble">
+            Hey, it's Mistral AI!
+            <br />
+            Tell me what you'd like to know.
+        </div>
+        
+        </div>
+        <div class="chat chat-end">
+        <div class="chat-bubble">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="message" placeholder="Type your message here..." class="mistral_input">
+                <button type="submit" class="btn">Send</button>
+            </form>
+        </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+            
+        </div>
+        </div>
+    </div>
+    
+</body>
+</html>
