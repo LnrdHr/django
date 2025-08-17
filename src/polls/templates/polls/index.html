@@ -27,6 +27,9 @@
     
     </div>
 
+    <div id="chatbot-root"></div>
+
+
     <div class="chat-container">
         <div class="chat chat-start">
         <div class="chat-bubble">
@@ -40,7 +43,7 @@
         <div class="chat-bubble">
             <form method="POST" action="">
                 {% csrf_token %}
-                <input type="text" name="message" placeholder="Type your message here..." class="mistral_input">
+                <input type="text" name="message" placeholder="Start typing..." class="mistral_input">
                 <button type="submit" class="btn">Send</button>
             </form>
         </div>
@@ -50,10 +53,3 @@
 </body>
 </html>
 
-            
-        </div>
-        </div>
-    </div>
-    
-</body>
-</html>

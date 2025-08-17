@@ -92,14 +92,14 @@ def make_openai_request(sender, **kwargs):
         print(f"Error during initial question population: {e}")
 
 #agent is created after the starting the server and if the agent isn't already cached
-@receiver(connection_created)
-def make_mistral_request(sender, **kwargs):
+# @receiver(connection_created)
+# def make_mistral_request(sender, **kwargs):
 
-    if cache.get('api_cooldown_mistral'):
-        return False
-    try:
-        simple_agent = create_agent()
-        cache.set('api_cooldown_mistral', True, timeout=CACHE_AGENT_TIMEOUT)
-        print("Agent created successfully.")
-    except Exception as e:
-        print(f"Error during agent creation: {e}")
+#     if cache.get('api_cooldown_mistral'):
+#         return False
+#     try:
+#         simple_agent = create_agent()
+#         cache.set('api_cooldown_mistral', True, timeout=CACHE_AGENT_TIMEOUT)
+#         print("Agent created successfully.")
+#     except Exception as e:
+#         print(f"Error during agent creation: {e}")
