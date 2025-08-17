@@ -29,8 +29,8 @@
 
     <div class="chat-container">
         <div class="chat chat-start">
-        <div class="chat-bubble">
-            Hey, it's Mistral AI!
+        <div id="bot-response" class="chat-bubble">
+            Hey, it's LangGraph's AI!
             <br />
             Tell me what you'd like to know.
         </div>
@@ -38,9 +38,9 @@
         </div>
         <div class="chat chat-end">
         <div class="chat-bubble">
-            <form method="POST" action="">
+            <form onsubmit="sendMessage(event)">
                 {% csrf_token %}
-                <input type="text" name="message" placeholder="Type your message here..." class="mistral_input">
+                <input type="text" name="message" placeholder="Type your message here..." class="langgraph_input">
                 <button type="submit" class="btn">Send</button>
             </form>
         </div>
@@ -50,10 +50,34 @@
 </body>
 </html>
 
-            
-        </div>
-        </div>
-    </div>
-    
-</body>
-</html>
+<script>
+    async function sendMessage(event){
+        event.preventDefault(); //TODO what does it do?
+        const input = document.getElementsByClassName('langgraph_input')[0];
+        const user_input = input.value.trim();
+        const bot_response = document.getElementById('bot-response');
+
+        if(!user_input)  return; // Don't send empty messages
+        bot_response.innerHTML = '<span class="loading loading-dots loading-md"></span> Thinking...';
+        try {
+            const response = await fetch('/polls/api/chatbot/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ message: user_input })
+            });
+            const data = await response.json(); //TODO why await just to convert to json? .json() returns a promise?
+            console.log(data);
+
+            bot_response.innerHTML = `
+                ${data.response}
+            `;
+            input.value = '';
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
+    }
+</script>

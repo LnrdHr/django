@@ -1,4 +1,5 @@
 import json
+from typing import Annotated, TypedDict
 from dotenv import load_dotenv
 from django.db.backends.signals import connection_created
 from django.core.cache import cache
@@ -8,6 +9,8 @@ from django.utils.timezone import now
 from polls.models import Choice, Question
 from polls.mistral_setup import create_agent
 from polls.views import IndexView
+from polls.chatbot import initialize_chatbot
+
 
 CACHE_QUESTIONS_TIMEOUT = 60 * 10 # 10 minutes
 CACHE_AGENT_TIMEOUT = 60 * 60 # 1 hour
@@ -91,15 +94,23 @@ def make_openai_request(sender, **kwargs):
     except Exception as e:
         print(f"Error during initial question population: {e}")
 
-#agent is created after the starting the server and if the agent isn't already cached
-@receiver(connection_created)
-def make_mistral_request(sender, **kwargs):
 
-    if cache.get('api_cooldown_mistral'):
-        return False
+@receiver(connection_created)
+def run_chatbot_initialization(sender, **kwargs):
     try:
-        simple_agent = create_agent()
-        cache.set('api_cooldown_mistral', True, timeout=CACHE_AGENT_TIMEOUT)
-        print("Agent created successfully.")
+        initialize_chatbot()
+        print("Chatbot initialized successfully.")
     except Exception as e:
-        print(f"Error during agent creation: {e}")
+        print(f"Error during chatbot initialization inside the signals.py: {e}")
+#agent is created after the starting the server and if the agent isn't already cached
+# @receiver(connection_created)
+# def make_mistral_request(sender, **kwargs):
+
+#     if cache.get('api_cooldown_mistral'):
+#         return False
+#     try:
+#         simple_agent = create_agent()
+#         cache.set('api_cooldown_mistral', True, timeout=CACHE_AGENT_TIMEOUT)
+#         print("Agent created successfully.")
+#     except Exception as e:
+#         print(f"Error during agent creation: {e}")

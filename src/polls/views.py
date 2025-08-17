@@ -1,10 +1,11 @@
-from django.http import HttpResponse, HttpResponseRedirect
+import json
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db.models import F
 from django.shortcuts import get_object_or_404, render
 from .models import Choice, Question
 from django.urls import reverse
 from django.views import generic
-from polls.mistral_setup import get_agent,get_client
+from django.views.decorators.csrf import csrf_exempt
 
 #using django's amend views here
 #we dont have to use this type of naming convention for the views, but it's a common practice
@@ -48,7 +49,20 @@ def vote(request, question_id):
         selected_choice.votes = F("votes") + 1 #instructs the database to increment the number of votes for the selected choice
         selected_choice.save()
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
-    
+
+@csrf_exempt #TODO is this safe?
+def fetch_chatbot_response(request):
+    if request.method == "POST":
+        data = json.loads(request.body) #convert from string-representation of JSON to the actual JSON
+        user_input = data.get("message", '')
+
+        if not user_input.strip():
+            return JsonResponse({"error": "Empty input message"}, status=400)
+        
+        from polls.chatbot import get_chatbot_response
+        chatbot_response = get_chatbot_response(user_input)
+        return JsonResponse({"response": chatbot_response})
+        
 # def chat_view(request, user_input):
 #     agent = get_agent()
 #     client = get_client()
