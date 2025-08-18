@@ -32,7 +32,8 @@
         <div id="bot-response" class="chat-bubble">
             Hey, it's LangGraph's AI!
             <br />
-            Tell me what you'd like to know.
+            Do you need help with the polls?
+            
         </div>
         
         </div>
@@ -40,7 +41,7 @@
         <div class="chat-bubble">
             <form onsubmit="sendMessage(event)">
                 {% csrf_token %}
-                <input type="text" name="message" placeholder="Type your message here..." class="langgraph_input">
+                <input type="text" name="message" placeholder="Type your message here..." class="langgraph_input"></input>
                 <button type="submit" class="btn">Send</button>
             </form>
         </div>
@@ -52,13 +53,18 @@
 
 <script>
     async function sendMessage(event){
-        event.preventDefault(); //TODO what does it do?
+        /*
+        DOCS: The preventDefault() method of the Event interface tells the user agent that the event is being explicitly handled,
+         so its default action, such as page scrolling, link navigation, or pasting text, should not be taken.
+        */
+        event.preventDefault();
         const input = document.getElementsByClassName('langgraph_input')[0];
         const user_input = input.value.trim();
+        
         const bot_response = document.getElementById('bot-response');
 
-        if(!user_input)  return; // Don't send empty messages
-        bot_response.innerHTML = '<span class="loading loading-dots loading-md"></span> Thinking...';
+        if(!user_input) return; // Don't send empty messages
+        bot_response.innerHTML = '<span class="loading loading-dots loading-md"></span> Thinking...'; //displaying 'loading' state
         try {
             const response = await fetch('/polls/api/chatbot/', {
                 method: 'POST',
@@ -68,7 +74,7 @@
                 },
                 body: JSON.stringify({ message: user_input })
             });
-            const data = await response.json(); //TODO why await just to convert to json? .json() returns a promise?
+            const data = await response.json(); //json() takes in the JSON and returns a promise that eventually resolves to a JavaScript object
             console.log(data);
 
             bot_response.innerHTML = `

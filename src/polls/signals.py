@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from django.db.backends.signals import connection_created
 from django.core.cache import cache
 from django.dispatch import receiver
-from openai import OpenAI
+from langfuse.openai import openai
 from django.utils.timezone import now
 from polls.models import Choice, Question
 from polls.mistral_setup import create_agent
@@ -14,6 +14,8 @@ from polls.chatbot import initialize_chatbot
 
 CACHE_QUESTIONS_TIMEOUT = 60 * 10 # 10 minutes
 CACHE_AGENT_TIMEOUT = 60 * 60 # 1 hour
+LANGFUSE_SESSION_ID = "first-session-id"
+LANGFUSE_USER_ID = "leonard"
 
 @receiver(connection_created)
 def clear_questions_in_db(sender, **kwargs): #i want to keep only 10 questions in the database
@@ -37,7 +39,7 @@ def make_openai_request(sender, **kwargs):
         load_dotenv('.env')
 
         # Create client (will automatically use OPENAI_API_KEY from environment)
-        client = OpenAI()
+        client = openai.Client()
 
         response = client.responses.create(
             model="gpt-4o-mini",
@@ -64,7 +66,8 @@ def make_openai_request(sender, **kwargs):
                     Start your response with [ and end with ]. Nothing else.
                     """
                 }
-            ]
+            ],
+            metadata={"langfuse_session_id": LANGFUSE_SESSION_ID, "langfuse_user_id": LANGFUSE_USER_ID}
         )
         raw_data = response.output[0].content[0].text
 
