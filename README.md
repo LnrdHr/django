@@ -1,38 +1,40 @@
-# 🗳️ Django Polls App with AI Chatbot
+# Django Polls App with AI Chatbot
 
-A modern Django polling application featuring an interactive AI chatbot powered by LangGraph, OpenAI GPT-4, and Tavily search integration. The app combines traditional polling functionality with intelligent conversational AI assistance.
+A modern Django polling application featuring an interactive AI chatbot powered by LangGraph, OpenAI GPT-4, Tavily search integration, and Langfuse observability. The app combines traditional polling functionality with intelligent conversational AI assistance.
 
-## ✨ Main Features
+## Main Features
 
-### 📊 **Polling System**
+### Polling System
 - **Question Management**: Create and manage poll questions with multiple choices
 - **Voting System**: Users can vote on questions with real-time result tracking
 - **Results Visualization**: View detailed voting results with statistics
 - **Question Detail Views**: Detailed question pages with voting forms
 - **Admin Interface**: Django admin panel for managing questions and choices
 
-### 🤖 **AI Chatbot Integration**
+### AI Chatbot Integration
 - **LangGraph-Powered AI**: Advanced conversational AI using LangGraph state graphs
 - **OpenAI GPT-4 Integration**: Powered by OpenAI's GPT-4-mini model
 - **Web Search Capabilities**: Real-time web search using Tavily Search API
 - **Memory Persistence**: Conversation history maintained across sessions
 - **Interactive Chat UI**: Real-time AJAX-powered chat interface with loading states
+- **Langfuse Observability**: Advanced monitoring, tracing, and analytics for AI interactions
 
-### 🎨 **Modern UI/UX**
+### Modern UI/UX
 - **Tailwind CSS + DaisyUI**: Modern, responsive design framework
 - **Dark Theme**: Beautiful gradient backgrounds with glass-morphism effects
 - **Interactive Elements**: Hover effects, smooth transitions, and animations
 - **Mobile Responsive**: Optimized for all device sizes
 - **Loading States**: Visual feedback for all user interactions
 
-### 🔧 **Technical Features**
+### Technical Features
 - **RESTful API**: JSON API endpoints for frontend integration
 - **AJAX Integration**: Seamless frontend-backend communication
 - **Database Management**: SQLite database with Django ORM
 - **Environment Configuration**: Secure API key management with `.env` files
 - **Signal-based Initialization**: Automatic chatbot setup on server start
+- **AI Observability**: Comprehensive tracking of AI model performance and usage
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 django/
@@ -62,9 +64,9 @@ django/
 └── README.md                  # This file
 ```
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
-### 📋 Prerequisites
+### Prerequisites
 
 Before running this application, ensure you have:
 
@@ -73,13 +75,15 @@ Before running this application, ensure you have:
 - **Git** installed
 - **OpenAI API Key** (for chatbot functionality)
 - **Tavily API Key** (for web search capabilities)
+- **Langfuse Account** (for AI observability and monitoring)
 
-### 🔑 API Keys Required
+### API Keys Required
 
 1. **OpenAI API Key**: Get from [OpenAI Platform](https://platform.openai.com)
 2. **Tavily API Key**: Get from [Tavily](https://tavily.com)
+3. **Langfuse Keys**: Get from [Langfuse Cloud](https://cloud.langfuse.com)
 
-### ⚡ Installation & Setup
+### Installation & Setup
 
 #### 1. **Clone the Repository**
 ```bash
@@ -101,7 +105,7 @@ source .venv/bin/activate
 
 #### 3. **Install Python Dependencies**
 ```bash
-pip install django python-dotenv langchain langchain-openai langgraph langchain-tavily-search
+pip install django python-dotenv langchain langchain-openai langgraph langchain-tavily-search langfuse
 ```
 
 #### 4. **Install Node.js Dependencies (for Tailwind CSS)**
@@ -121,9 +125,12 @@ Add your API keys to `.env`:
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
 TAVILY_API_KEY=your_tavily_api_key_here
+LANGFUSE_SECRET_KEY=your_langfuse_secret_key_here
+LANGFUSE_PUBLIC_KEY=your_langfuse_public_key_here
+LANGFUSE_HOST=https://cloud.langfuse.com
 ```
 
-⚠️ **Important**: Never commit your `.env` file to version control!
+**Important**: Never commit your `.env` file to version control!
 
 #### 6. **Database Setup**
 ```bash
@@ -146,7 +153,7 @@ If you make CSS changes:
 npx tailwindcss -i ./src/polls/static/polls/input.css -o ./src/polls/static/polls/output.css --watch
 ```
 
-### 🎯 Running the Application
+### Running the Application
 
 #### **Start the Development Server**
 ```bash
@@ -157,8 +164,9 @@ python manage.py runserver
 #### **Access the Application**
 - **Main Application**: http://127.0.0.1:8000/polls/
 - **Admin Interface**: http://127.0.0.1:8000/admin/ (if superuser created)
+- **Langfuse Dashboard**: https://cloud.langfuse.com (for AI monitoring)
 
-### 📱 Using the Application
+### Using the Application
 
 #### **Polling Features**
 1. **View Questions**: Browse available poll questions on the main page
@@ -171,8 +179,9 @@ python manage.py runserver
 2. **Get AI Responses**: Powered by GPT-4 with web search capabilities
 3. **Real-time Interaction**: AJAX-powered chat with loading indicators
 4. **Persistent Memory**: Conversation context maintained across messages
+5. **Performance Monitoring**: Track AI interactions via Langfuse dashboard
 
-## 🛠️ API Endpoints
+## API Endpoints
 
 ### **Polling API**
 - `GET /polls/api/questions/` - List all questions
@@ -198,7 +207,7 @@ const data = await response.json();
 console.log(data.response); // AI response
 ```
 
-## 🔧 Development
+## Development
 
 ### **Adding New Questions**
 1. Use Django admin interface at `/admin/`
@@ -227,25 +236,39 @@ Edit `polls/chatbot.py` to modify:
 - **Tools**: Add or remove search capabilities
 - **Memory**: Adjust conversation memory settings
 - **Prompts**: Customize system prompts
+- **Langfuse Integration**: Modify observability settings
+
+### **Langfuse Observability Features**
+- **Conversation Tracking**: Monitor all chatbot interactions
+- **Performance Metrics**: Track response times and token usage
+- **Error Monitoring**: Identify and debug AI model issues
+- **Usage Analytics**: Analyze user interaction patterns
+- **Cost Tracking**: Monitor OpenAI API usage and costs
 
 ### **Styling Changes**
 - **Tailwind CSS**: Modify classes in templates
 - **Custom CSS**: Edit `polls/static/polls/style.css`
 - **DaisyUI**: Use DaisyUI components for consistent design
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### **Common Issues**
 
 #### **"ModuleNotFoundError" for AI packages**
 ```bash
-pip install langchain langchain-openai langgraph langchain-tavily-search
+pip install langchain langchain-openai langgraph langchain-tavily-search langfuse
 ```
 
 #### **Chatbot not responding**
-1. Check `.env` file contains valid API keys
+1. Check `.env` file contains valid API keys (OpenAI, Tavily, Langfuse)
 2. Verify internet connection for API calls
 3. Check Django logs for error messages
+4. Verify Langfuse configuration in dashboard
+
+#### **Langfuse connection issues**
+1. Verify `LANGFUSE_HOST` is set to `https://cloud.langfuse.com`
+2. Check that `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` are correct
+3. Ensure Langfuse project is properly configured
 
 #### **CSS not loading**
 1. Run `python manage.py collectstatic`
@@ -261,23 +284,25 @@ python manage.py migrate
 - Check Django logs in the terminal
 - Use browser developer tools (F12) to check for JavaScript errors
 - Verify API responses in Network tab
+- Monitor AI interactions in Langfuse dashboard
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Django** - Web framework
 - **OpenAI** - AI model provider
 - **LangGraph** - AI workflow framework
+- **Langfuse** - AI observability and monitoring platform
 - **Tailwind CSS + DaisyUI** - UI framework
 - **Tavily** - Web search API
 
 ---
 
-**Happy Polling! 🗳️✨**
+**Happy Polling!**
