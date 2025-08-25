@@ -2,6 +2,14 @@
 
 A modern Django polling application featuring an interactive AI chatbot powered by LangGraph, OpenAI GPT-4, Tavily search integration, and Langfuse observability. The app combines traditional polling functionality with intelligent conversational AI assistance.
 
+<video src="https://github.com/user-attachments/assets/b0594c17-c773-42c9-b6b1-f77369201d7e"
+       autoplay loop muted playsinline
+       style="max-width:100%;"
+       onloadedmetadata="this.playbackRate=2.0;">
+</video>
+
+
+
 ## Main Features
 
 ### Polling System
